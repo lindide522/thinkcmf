@@ -55,7 +55,7 @@ class SystemInfoPlugin extends Plugin
             lang('PHP_VERSION')           => phpversion(),
             lang('MYSQL_VERSION')         => $mysql,
             'ThinkPHP'                    => THINK_VERSION,
-            '布光科技'                    => "{$version} <a href=\"http://www.布光科技.com\" target=\"_blank\">访问官网</a>",
+            '布光科技'                    => "{$version} <a href=\"http://www.ibuguang.com\" target=\"_blank\">访问官网</a>",
             lang('UPLOAD_MAX_FILESIZE')   => ini_get('upload_max_filesize'),
             lang('MAX_EXECUTION_TIME')    => ini_get('max_execution_time') . "s",
             //TODO 增加更多信息

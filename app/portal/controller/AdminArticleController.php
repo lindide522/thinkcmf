@@ -216,7 +216,6 @@ class AdminArticleController extends AdminBaseController
                 'article' => $data['post']
             ];
             hook('portal_admin_after_save_article', $hookParam);
-
             $this->success('保存成功!');
 
         }
