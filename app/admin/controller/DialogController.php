@@ -18,7 +18,6 @@ class DialogController extends AdminBaseController
     {
 
     }
-
     public function map()
     {
         $location = $this->request->param('location');

@@ -28,7 +28,6 @@ class BaseController extends Controller
             header('Location: ' . cmf_get_root() . '/?s=install');
             exit;
         }
-
         if (is_null($request)) {
             $request = Request::instance();
         }
@@ -37,7 +36,6 @@ class BaseController extends Controller
 
         $this->_initializeView();
         $this->view = View::instance(Config::get('template'), Config::get('view_replace_str'));
-
 
         // 控制器初始化
         $this->_initialize();

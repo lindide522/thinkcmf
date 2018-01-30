@@ -27,7 +27,6 @@ class PluginModel extends Model
             return false;
         }
         $plugins = [];
-
         if (empty($dirs)) return $plugins;
 
         $list = $this->select();
@@ -70,7 +69,6 @@ class PluginModel extends Model
         if (!$refresh) {
             // TODO 加入缓存
         }
-
         $returnHooks = [];
         $systemHooks = [
             //系统钩子
