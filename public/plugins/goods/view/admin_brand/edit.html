@@ -1,0 +1,57 @@
+<include file="public@head" />
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('goods://AdminBrand/index')}">品牌列表</a></li>
+        <li class="active"><a href="{:cmf_plugin_url('goods://AdminBrand/edit')}">编辑品牌</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('goods://AdminBrand/edit')}">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>名称</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="name" value="{$data.name}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">logo</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="hidden" name="logo" id="thumbnail" value="{$data.logo}">
+                <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+
+                    <if condition="empty($data.logo)">
+                        <img src="__ADMIN_TMPL__/public/assets/images/default-thumbnail.png"
+                             id="thumbnail-preview"
+                             width="135" style="cursor: pointer"/>
+                        <else/>
+                        <img src="{:cmf_get_image_preview_url($data.logo)}"
+                             id="thumbnail-preview"
+                             width="135" style="cursor: pointer"/>
+                    </if>
+                </a>
+                <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="sort" value="{$data.sort}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">描述</label>
+            <div class="col-md-6 col-sm-10">
+                <textarea name="desc"  class="form-control">{$data.desc}</textarea>
+            </div>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="id" value="{$data.brand_id}">
+            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+</div>
+</body>
+</html>

@@ -252,20 +252,6 @@
                data-toggle="tooltip">
                 <i class="fa fa-home"></i>
             </a>
-            <!--
-            <if condition="cmf_auth_check(cmf_get_current_admin_id(),'portal/AdminCategory/index')">
-                <a class="btn btn-sm btn-success" href="javascript:openapp('{:url('portal/AdminCategory/index')}','index_termlist','文章分类管理');" title="文章分类管理">
-                    <i class="fa fa-th"></i>
-                </a>
-            </if>
-
-            <if condition="cmf_auth_check(cmf_get_current_admin_id(),'portal/AdminArticle/index')">
-                <a class="btn btn-sm btn-info" href="javascript:openapp('{:url('portal/AdminArticle/index')}','index_postlist','文章管理');" title="文章管理">
-                    <i class="fa fa-pencil"></i>
-                </a>
-            </if>
-            -->
-
             <if condition="cmf_auth_check(cmf_get_current_admin_id(),'user/AdminAsset/index')">
                 <a class="btn btn-sm btn-info"
                    href="javascript:openapp('{:url('user/AdminAsset/index')}','userAdminAssetindex','资源管理',true);"

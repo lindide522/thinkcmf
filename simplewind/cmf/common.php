@@ -480,9 +480,8 @@ function cmf_get_option($key)
     if (!is_string($key) || empty($key)) {
         return [];
     }
-
+    $key        = strtolower($key);
     static $cmfGetOption;
-
     if (empty($cmfGetOption)) {
         $cmfGetOption = [];
     } else {
@@ -494,7 +493,7 @@ function cmf_get_option($key)
     $optionValue = cache('cmf_options_' . $key);
 
     if (empty($optionValue)) {
-        $optionValue = Db::name('option')->where('option_name', $key)->value('option_value');
+        $optionValue = Db::name('option')->cache(5)->where('option_name', $key)->value('option_value');
         if (!empty($optionValue)) {
             $optionValue = json_decode($optionValue, true);
 
@@ -1855,4 +1854,36 @@ function cmf_data_to_xml($data, $item = 'item', $id = 'id')
         $xml .= "</{$key}>";
     }
     return $xml;
+}
+
+/*
+* 把返回的数据集转换成Tree
+* @param array $list 要转换的数据集
+* @param string $pid parent标记字段
+* @param string $level level标记字段
+* @return array
+ */
+function list_to_tree($list, $pk='id', $pid = 'pid', $child = '_child', $root = 0) {
+    // 创建Tree
+    $tree = array();
+    if(is_array($list)) {
+        // 创建基于主键的数组引用
+        $refer = array();
+        foreach ($list as $key => $data) {
+            $refer[$data[$pk]] =& $list[$key];
+        }
+        foreach ($list as $key => $data) {
+            // 判断是否存在parent
+            $parentId =  $data[$pid];
+            if ($root == $parentId) {
+                $tree[] =& $list[$key];
+            }else{
+                if (isset($refer[$parentId])) {
+                    $parent =& $refer[$parentId];
+                    $parent[$child][] =& $list[$key];
+                }
+            }
+        }
+    }
+    return $tree;
 }

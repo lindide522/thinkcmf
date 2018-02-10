@@ -68,7 +68,6 @@
     </case>
 </switch>
 <php>}</php>
-
 <include file="public@header"/>
 <style>
     .home-info li em {
@@ -150,7 +149,39 @@
             </div>
         </div>
     </div>
+    <div class="jq22">
+        <select>
+            <option value="">城市</option>
 
+            <optgroup label="广东省">
+                <option value="深圳">深圳</option>
+                <option value="广州">广州</option>
+                <option value="珠海">珠海</option>
+                <option value="惠州">惠州</option>
+            </optgroup>
+
+            <optgroup label="湖南省">
+                <option value="长沙" selected >长沙</option>
+                <option value="株洲">株洲</option>
+                <option value="岳阳">岳阳</option>
+                <option value="张家界">张家界</option>
+            </optgroup>
+
+            <optgroup label="江西省">
+                <option value="南昌">南昌</option>
+                <option value="赣州">赣州</option>
+                <option value="宜春">宜春</option>
+                <option value="九江">九江</option>
+            </optgroup>
+        </select>
+    </div>
+    <link rel="stylesheet" href="__TMPL__/public/assets/themes/{:cmf_get_admin_style()}/combo.select.css">
+    <script src="__TMPL__/public/assets/js/jquery.combo.select.js"></script>
+    <script>
+        $(function() {
+            $('select').comboSelect()
+        });
+    </script>
     <div class="home-grid">
         <!-- width of .grid-sizer used for columnWidth -->
         <div class="grid-sizer"></div>

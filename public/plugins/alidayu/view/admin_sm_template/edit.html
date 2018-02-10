@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>布光科技插件演示首页</title>
+    <meta name="description" content="布光科技插件演示首页">
+    <meta name="keywords" content="布光科技插件演示首页">
+</head>
+<body>
+<style>
+    .center
+    {
+        text-align:right;
+    }
+    .red{
+        color: red;
+    }
+</style>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li ><a href="{:cmf_plugin_url('Alidayu://AdminIndex/index')}">配置短信参数</a></li>
+        <li ><a href="{:cmf_plugin_url('Alidayu://AdminSmTemplate/index')}">短信模板列表</a></li>
+        <li class="active"><a href="{:cmf_plugin_url('Alidayu://AdminSmTemplate/editPost')}/id/{$Think.get.id}">编辑模板</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('Alidayu://AdminSmTemplate/editPost')}" >
+
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <td class="center">短信签名:</td>
+                    <td>
+                        <div style="vertical-align:middle;display:inline">
+                            <input type="text" value="{$smsTpl.sms_sign|default=''}" name="sms_sign" class="form-control" style="width:200px;"/>
+                            <span><em class="red">*</em>必须与短信平台短信签名一致</span>
+                            <span id="err_sms_sign" style="color:#F00; display:none;">短信签名不能为空</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="center">短信模板ID:</td>
+                    <td>
+                        <input type="text" value="{$smsTpl.sms_tpl_code|default=''}" name="sms_tpl_code" class="form-control" style="width:250px;"/>
+                        <span ><em class="red">*</em>必须与短信平台短信模板ID一致</span>
+                        <span id="err_sms_tpl_code" style="color:#F00; display:none;">短信模板ID不能为空</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="center">发送场景:</td>
+                    <td>
+
+                        <div class="col-sm-3">
+                            <input type="hidden" name="send_scene" value="{$smsTpl.send_scene}">
+                            {$send_scene[$smsTpl.send_scene][0]}
+                            <span id="err_send_scene" style="color:#F00; display:none;">请选择使用场景</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="center">短信内容:</td>
+                    <td>
+                        <textarea rows="4" cols="60" name="tpl_content" id="tpl_content">{$smsTpl.tpl_content|default=''}</textarea>
+                        <span id="err_tpl_content" style="color:#F00; display:none;" readonly="">短信内容不能为空</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+        </div>
+    </form>
+</div>
+<php> $scene= json_encode($send_scene); </php>
+<include file="public/scripts"/>
+<script type="text/javascript">
+    function changeContent(scene){
+        if(scene == -1){
+            $("#addEditSmsTemplate").find("textarea[name='tpl_content']").val('');
+            return;
+        }
+        var scenes={$scene};
+        var txt = scenes[scene][1];
+        $("#tpl_content").val(txt);
+    }
+</script>
+</body>
+</html>

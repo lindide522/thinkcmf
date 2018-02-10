@@ -1,0 +1,57 @@
+<include file="public@head" />
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:cmf_plugin_url('goods://AdminCat/index')}">类别列表</a></li>
+        <li><a href="{:cmf_plugin_url('goods://AdminCat/add')}">添加类别</a></li>
+    </ul>
+    <form method="post" class="js-ajax-form" action="{:cmf_plugin_url('goods://AdminCat/listOrder')}">
+        <div class="table-actions">
+            <button type="submit" class="btn btn-primary btn-sm js-ajax-submit">{:lang('SORT')}</button>
+        </div>
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="50">排序</th>
+                <th width="50">ID</th>
+                <th>分类名称</th>
+                <th>图片</th>
+                <th>描述</th>
+                <th>创建时间</th>
+                <th>修改时间</th>
+                <th width="180">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <foreach name="list" item="vo">
+                    <tr>
+                        <td><input type="text" name="list_orders[{$vo.cat_id}]" value="{$vo.sort}" size="3"></td>
+                        <td>{$vo.cat_id}</td>
+                        <td>{$vo.title_show}</td>
+                        <td>
+                            <notempty name="vo.image">
+                                <a href="javascript:parent.imagePreviewDialog('{:cmf_get_image_preview_url($vo.image)}');">
+                                    <i class="fa fa-photo fa-fw"></i>
+                                </a>
+                            </notempty>
+                        </td>
+                        <td>{$vo.desc}</td>
+                        <td>{$vo.create_time|date="Y-m-d H:i",###}</td>
+                        <td>{$vo.update_time|date="Y-m-d H:i",###}</td>
+                        <td>
+                            <a href='{:cmf_plugin_url("goods://AdminCat/add",array("id"=>$vo["cat_id"]))}'>添加子分类</a>
+                            <a href='{:cmf_plugin_url("goods://AdminCat/edit",array("id"=>$vo["cat_id"]))}'>{:lang('EDIT')}</a>
+                            <a class="js-ajax-delete" href="{:cmf_plugin_url('goods://AdminCat/delete',array('id'=>$vo['cat_id']))}">{:lang('DELETE')}</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </tbody>
+        </table>
+        <div class="table-actions">
+            <button type="submit" class="btn btn-primary btn-sm js-ajax-submit">{:lang('SORT')}</button>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+</body>
+</html>

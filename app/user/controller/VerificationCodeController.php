@@ -98,7 +98,6 @@ class VerificationCodeController extends HomeBaseController
 
             $param  = ['mobile' => $data['username'], 'code' => $code];
             $result = hook_one("send_mobile_verification_code", $param);
-
             if ($result !== false && !empty($result['error'])) {
                 $this->error($result['message']);
             }

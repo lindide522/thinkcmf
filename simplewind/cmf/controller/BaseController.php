@@ -67,10 +67,11 @@ class BaseController extends Controller
 
         $pk  = $model->getPk(); //获取主键名称
         $ids = $this->request->post("list_orders/a");
-
         if (!empty($ids)) {
             foreach ($ids as $key => $r) {
                 $data['list_order'] = $r;
+                $data['sort']=$r;
+                $data['update_time']=$this->request->time();
                 $model->where([$pk => $key])->update($data);
             }
 

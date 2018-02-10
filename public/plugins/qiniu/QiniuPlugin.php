@@ -76,7 +76,6 @@ class QiniuPlugin extends Plugin
     {
 
 
-
     }
 
 }

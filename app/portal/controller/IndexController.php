@@ -16,6 +16,7 @@ class IndexController extends HomeBaseController
 {
     public function index()
     {
+        echo '暂无页面';exit;
         return $this->fetch(':index');
     }
 }

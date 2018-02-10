@@ -1,0 +1,50 @@
+<include file="public@head" />
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('goods://AdminSuppliers/index')}">供应商列表</a></li>
+        <li class="active"><a href="{:cmf_plugin_url('goods://AdminSuppliers/add')}">添加供应商</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('goods://AdminSuppliers/add')}">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>名称</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="name" value="">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">描述</label>
+            <div class="col-md-6 col-sm-10">
+                <textarea name="desc"  class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="sort" value="50">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">联系人</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="contacts" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">电话</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="phone" >
+            </div>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+</div>
+</body>
+</html>

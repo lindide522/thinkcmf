@@ -1,0 +1,57 @@
+<include file="public@head" />
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('goods://AdminAttribute/index')}">属性列表</a></li>
+        <li class="active"><a href="{:cmf_plugin_url('goods://AdminAttribute/add')}">添加属性</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('goods://AdminAttribute/add')}">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>名称</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="attr_name" value="">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>所属商品类型</label>
+            <div class="col-md-6 col-sm-10">
+                <select name="type_id" id="" class="form-control">
+                    <volist name="type_list" id="vo">
+                        <option value="{$vo.type_id}">{$vo.name}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>录入方式</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="radio" value="0" name="attr_input_type" checked="checked" >手工录入
+                <input type="radio" value="1" name="attr_input_type">从下面的列表中选择（一行代表一个可选值）
+                <input type="radio" value="2" name="attr_input_type">多行文本框
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">可选值列表</label>
+            <div class="col-md-6 col-sm-10" >
+                <textarea rows="10" cols="30" name="attr_values" class="form-control" style="height:100px;"></textarea>
+                <span id="err_attr_values" class="err" style="color:#F00; display:none;"></span>
+                <p >录入方式为手工或者多行文本时，此输入框不需填写。</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="sort" value="50">
+            </div>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+</div>
+</body>
+</html>

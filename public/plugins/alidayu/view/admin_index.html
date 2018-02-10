@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>布光科技插件演示首页</title>
+    <meta name="description" content="布光科技插件演示首页">
+    <meta name="keywords" content="布光科技插件演示首页">
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>配置短信参数</a></li>
+        <li><a href="{:cmf_plugin_url('Alidayu://AdminSmTemplate/index')}">短信模板设置</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('Alidayu://AdminIndex/editPost')}" >
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>短信平台[appkey]</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="sms_appkey" value="{$alidayu_settings.sms_appkey|default=''}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="form-required">*</span>短信平台[secretKey]</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="sms_secretKey" value="{$alidayu_settings.sms_secretKey|default=''}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">短信码超时时间</label>
+            <div class="col-md-6 col-sm-10">
+                <select id="sms_time_out" name="sms_time_out" class="form-control valid">
+                    <option value="60" <if condition="$alidayu_settings['sms_time_out'] eq 60">selected="selected"</if>>1分钟</option>
+                    <option value="120"<if condition="$alidayu_settings['sms_time_out'] eq 120">selected="selected"</if>>2分钟</option>
+                    <option value="300"<if condition="$alidayu_settings['sms_time_out'] eq 300">selected="selected"</if>>5分钟</option>
+                    <option value="600"<if condition="$alidayu_settings['sms_time_out'] eq 600">selected="selected"</if>>10分钟</option>
+                    <option value="1200"<if condition="$alidayu_settings['sms_time_out'] eq 1200">selected="selected"</if>>20分钟</option>
+                    <option value="1800"<if condition="$alidayu_settings['sms_time_out'] eq 1800">selected="selected"</if>>30分钟</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+</body>
+</html>

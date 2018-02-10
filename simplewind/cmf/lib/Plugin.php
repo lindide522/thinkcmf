@@ -230,13 +230,17 @@ abstract class Plugin
     final public function getConfig()
     {
         static $_config = [];
+        $config=[];
         $name = $this->getName();
         if (isset($_config[$name])) {
             return $_config[$name];
         }
 
-        $config = Db::name('plugin')->where('name', $name)->value('config');
-
+       // $config = Db::name('plugin')->cache(5)->where('name', $name)->value('config');
+        $plugin = Db::name('plugin')->cache(10)->column('config','name');
+        if(!empty($plugin) && isset($plugin[$name])){
+            $config=$plugin[$name];
+        }
         if (!empty($config) && $config != "null") {
             $config = json_decode($config, true);
         } else {

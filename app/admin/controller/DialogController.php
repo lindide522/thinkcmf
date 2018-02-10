@@ -28,5 +28,4 @@ class DialogController extends AdminBaseController
         $this->assign(['lng' => $lng, 'lat' => $lat]);
         return $this->fetch();
     }
-
 }

@@ -16,6 +16,8 @@ class PluginAdminBaseController extends PluginBaseController
     // 初始化
     protected function _initialize()
     {
+        // 监听admin_init
+        hook('admin_init');
         $adminId = cmf_get_current_admin_id();
         if (!empty($adminId)) {
             if (!$this->checkAccess($adminId)) {
@@ -47,9 +49,6 @@ class PluginAdminBaseController extends PluginBaseController
         $controller = $this->request->param('_controller');
         $controller = cmf_parse_name($controller, 1);
         $action     = $this->request->param('_action');
-
         return cmf_auth_check($userId, "plugin/{$pluginName}/$controller/$action");
     }
-
-
 }
