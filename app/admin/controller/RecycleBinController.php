@@ -64,8 +64,10 @@ class RecycleBinController extends AdminBaseController
         $tableName = $tableName[0];
         //还原资源
         if ($result) {
-            $res = Db::name($tableName)
-                ->where(['id' => $result['object_id']])
+            $model=Db::name($tableName);
+            $pk  = $model->getPk(); //获取主键名称
+            $res = $model
+                ->where([$pk => $result['object_id']])
                 ->update(['delete_time' => '0']);
             if ($tableName =='portal_post'){
                 Db::name('portal_category_post')->where('post_id',$result['object_id'])->update(['status'=>1]);
@@ -109,7 +111,9 @@ class RecycleBinController extends AdminBaseController
                 $routeModel->setRoute('', 'portal/Page/index', ['id' => $result['object_id']], 2, 5000);
                 $routeModel->getRoutes(true);
             }else{
-                $re = Db::name($result['table_name'])->where('id', $result['object_id'])->delete();
+                $model=Db::name($result['table_name']);
+                $pk  = $model->getPk(); //获取主键名称
+                $re =$model ->where($pk, $result['object_id'])->delete();
             }
 
             if ($re) {
@@ -117,6 +121,10 @@ class RecycleBinController extends AdminBaseController
                 if($result['table_name'] === 'portal_post'){
                     Db::name('portal_category_post')->where('post_id',$result['object_id'])->delete();
                     Db::name('portal_tag_post')->where('post_id',$result['object_id'])->delete();
+                }
+                if($result['table_name'] === 'goods'){
+                    Db::name('goods_attr')->where('goods_id',$result['object_id'])->delete();
+                    Db::name('goods_images')->where('goods_id',$result['object_id'])->delete();
                 }
                 if ($res) {
                     $this->success("删除成功！");

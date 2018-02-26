@@ -248,5 +248,4 @@ class SettingController extends AdminBaseController
         cmf_clear_cache();
         return $this->fetch();
     }
-
 }

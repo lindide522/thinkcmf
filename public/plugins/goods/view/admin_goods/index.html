@@ -1,0 +1,124 @@
+<include file="public@head" />
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:cmf_plugin_url('goods://AdminGoods/index')}">商品列表</a></li>
+        <li><a href="{:cmf_plugin_url('goods://AdminGoods/add')}">添加商品</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:cmf_plugin_url('goods://AdminGoods/index')}">
+        <select name="cat_id" class="form-control">
+            <option value="">请选择类别</option>
+            <volist name="catTree" id="vo">
+                <option value="{$vo.cat_id}" <eq name="vo.cat_id" value=":input('request.cat_id')">selected</eq>>{$vo.title_show}</option>
+            </volist>
+        </select>
+        <select name="brand_id" class="form-control">
+            <option value="">选择品牌</option>
+            <volist name="brand" id="vo">
+                <option value="{$vo.brand_id}" <eq name="vo.brand_id" value=":input('request.brand_id')">selected</eq>>{$vo.name}</option>
+            </volist>
+        </select>
+        <select name="suppliers_id" class="form-control">
+            <option value="">选择供应商</option>
+            <volist name="suppliers" id="vo">
+                <option value="{$vo.suppliers_id}" <eq name="vo.suppliers_id" value=":input('request.suppliers_id')">selected</eq>>{$vo.name}</option>
+            </volist>
+        </select>
+        商品:
+        <input type="text" class="form-control" name="goods_name" style="width: 120px;" value="{:input('request.goods_name/s','')}" placeholder="请输入商品名称">
+        <input type="submit" class="btn btn-primary" value="搜索" />
+        <a class="btn btn-danger" href="{:cmf_plugin_url('goods://AdminGoods/index')}">清空</a>
+    </form>
+    <form class="js-ajax-form" action="" method="post">
+    <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th width="15">
+                <label>
+                    <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                </label>
+            </th>
+            <th width="50">ID</th>
+            <th>商品名称</th>
+            <th>所属品牌</th>
+            <th>类别</th>
+            <th>单价</th>
+            <th>图片</th>
+            <th>状态</th>
+            <th>排序</th>
+            <th>创建时间</th>
+            <th>最后修改时间</th>
+            <th width="130">{:lang('ACTIONS')}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <div class="table-actions">
+                <button type="submit" class="btn btn-primary btn-sm js-ajax-submit" data-action="{:cmf_plugin_url('goods://AdminGoods/listOrder')}">排序</button>
+                <button class="btn btn-primary btn-sm js-ajax-submit" type="submit"
+                        data-action="{:cmf_plugin_url('goods://AdminGoods/publish',['yes'=>1])}" data-subcheck="true">上架
+                </button>
+                <button type="submit" class="btn btn-danger btn-sm js-ajax-submit" data-action="{:cmf_plugin_url('goods://AdminGoods/publish',['yes'=>0])}" data-subcheck="true">下架</button>
+                <button type="submit" class="btn btn-danger btn-sm js-ajax-submit" data-action="{:cmf_plugin_url('goods://AdminGoods/delete')}" data-subcheck="true">批量删除</button>
+            </div>
+            <foreach name="list" item="vo">
+                <tr>
+                    <td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.goods_id}" title="ID:{$vo.goods_id}"></td>
+                    <td>{$vo.goods_id}</td>
+                    <td>{$vo.goods_name}</td>
+                    <php>
+                        $str='<a data-toggle="tooltip" title="未设置"><i class="fa fa-close"></i></a>';
+                    </php>
+                    <?php
+                        foreach ($brand   as $index => $val) {
+                            $brand[$val['brand_id']]=$val;
+                        }
+                        if(!isset($brand[$vo['brand_id']])){
+                            $brand_name=$str;
+                        }else{
+                            $brand_name=$brand[$vo['brand_id']]['name'];
+                        }
+                    ?>
+                    <td>{$brand_name|default=""}</td>
+                    <?php
+                        foreach ($catTree   as $index => $cat) {
+                            $catTree[$cat['cat_id']]=$cat;
+                        }
+                        if(!isset($catTree[$vo['cat_id']])){
+                            $cat_name=$str;
+                        }else{
+                            $cat_name=$catTree[$vo['cat_id']]['name'];
+                        }
+                    ?>
+                    <td>{$cat_name}</td>
+                    <td>{$vo.market_price}</td>
+                    <td>
+                        <notempty name="vo.thumb_img">
+                            <a href="javascript:parent.imagePreviewDialog('{:cmf_get_image_preview_url($vo.thumb_img)}');">
+                                <i class="fa fa-photo fa-fw"></i>
+                            </a>
+                        </notempty>
+                    </td>
+                    <td>
+                        <notempty name="vo.is_on_sale">
+                            <a data-toggle="tooltip" title="已发布"><i class="fa fa-check"></i></a>
+                            <else/>
+                            <a data-toggle="tooltip" title="未发布"><i class="fa fa-close"></i></a>
+                        </notempty>
+                    </td>
+                    <td><input type="text" name="list_orders[{$vo.goods_id}]" value="{$vo.sort}" size="3"></td>
+                    <td>{$vo.create_time|date="Y-m-d H:i",###}</td>
+                    <td>{$vo.update_time|date="Y-m-d H:i",###}</td>
+                    <td>
+                        <a href='{:cmf_plugin_url("goods://AdminGoods/edit",array("id"=>$vo["goods_id"]))}'>{:lang('EDIT')}</a>
+                        <a class="js-ajax-delete" href="{:cmf_plugin_url('goods://AdminGoods/delete',array('id'=>$vo['goods_id']))}">{:lang('DELETE')}</a>
+                    </td>
+                </tr>
+            </foreach>
+        </tbody>
+    </table>
+    </form>
+    <ul class="pagination">{$list->render()}</ul>
+</div>
+<include file="public/scripts"/>
+</body>
+</html>

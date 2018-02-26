@@ -2,11 +2,12 @@
 <script src="__STATIC__/js/wind.js"></script>
 <script src="__STATIC__/js/bootstrap.min.js"></script>
 <script src="__STATIC__/js/admin.js"></script>
-<script>
+<script type="text/javascript">
     $(function () {
         $('.btn-cancel-thumbnail').click(function () {
             $('#thumbnail-preview').attr('src', '__ADMIN_TMPL__/public/assets/images/default-thumbnail.png');
             $('#thumbnail').val('');
         });
+        $("[data-toggle='tooltip']").tooltip();
     })
 </script>

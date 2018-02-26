@@ -59,7 +59,7 @@ class UserController extends AdminBaseController
         $users = Db::name('user')
             ->where($where)
             ->order("id DESC")
-            ->paginate(1);
+            ->paginate();
         $users->appends(['user_login' => $userLogin, 'user_email' => $userEmail]);
         // 获取分页显示
         $page = $users->render();

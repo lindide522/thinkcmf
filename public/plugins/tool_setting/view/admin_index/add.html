@@ -1,0 +1,129 @@
+<include file="public@head" />
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('ToolSetting://AdminIndex/index')}">方案管理</a></li>
+        <li class="active"><a href="{:cmf_plugin_url('ToolSetting://AdminIndex/add')}">添加方案</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('ToolSetting://AdminIndex/add')}">
+        <table class="table table-bordered">
+            <tr>
+                <th width="100px"><span class="form-required">*</span>类别</th>
+                <td>
+                    <select name="cat_id" id="" class="form-control" required>
+                        <option value="">---选择分类---</option>
+                        <volist name="catTree" id="vo">
+                            <option value="{$vo.cat_id}">{$vo.title_show}</option>
+                        </volist>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="form-required">*</span>方案名称</th>
+                <td><input type="text" name="name" class="form-control" required></td>
+            </tr>
+            <tr>
+                <th>内容</th>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="doSelectGoods()">新增商品</button>
+                    <table class="table table-bordered" style="margin-top: 10px;" id="goods">
+                        <thead>
+                        <tr>
+                            <th width="50px">ID</th>
+                            <th>商品名称</th>
+                            <th>商品单价</th>
+                            <th>单位</th>
+                            <th>计算公式</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th>描述</th>
+                <td>
+                    <textarea name="des"  class="form-control"></textarea>
+                </td>
+            </tr>
+        </table>
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+<script type="text/javascript">
+    function doSelectGoods() {
+        openIframeLayer("{:cmf_plugin_url('goods://AdminGoods/select')}", '请选择商品', {
+            area: ['900px', '500px'],
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                //do something
+
+                var iframeWin          = window[layero.find('iframe')[0]['name']];
+                console.log(iframeWin);
+                var selectedGoods = iframeWin.confirm();
+                if (selectedGoods.selectedGoodsId.length == 0) {
+                    layer.msg('请选择商品');
+                    return;
+                }
+                var html="";
+                $.each(selectedGoods.selectedGoods,function (index,good) {
+                    html+="                   <tr>\n" +
+                        "                            <td>"+good.id+"</td>\n" +
+                        "                            <input type='hidden' name='goods_ids[]' value='"+good.id+"'>" +
+                        "                            <td>"+good.name+"</td>\n" +
+                        "                            <td>"+good.price+"</td>\n" +
+                        "                            <td>件</td>\n" +
+                        "                            <td class='more'></td>\n" +
+                        "                            <td><a href='javascript:void(0);' onclick=\"formula_edit("+good.id+",this)\">公式编辑</a> <a href=\"javascript:void(0);\" onclick='del_goods("+good.id+",this)'>删除</a><div class=\"hidden\"><input type=\"hidden\" name=\"check_formula["+good.id+"]\" value=\"0\"></div></td>\n" +
+                        "                        </tr>"
+                });
+
+                $("#goods>tbody").html(html);
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+            }
+        });
+    }
+
+    function formula_edit(id,obj) {
+        openIframeLayer("{:cmf_plugin_url('ToolSetting://AdminIndex/formula_edit')}?ids=" + id, '编辑公式', {
+            area: ['500px', '300px'],
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                //do something
+                var iframeWin          = window[layero.find('iframe')[0]['name']];
+                var selectedFormula = iframeWin.confirm();
+                if (selectedFormula.selectFormulaType.length == 0) {
+                    layer.msg('未设置公式');
+                    return;
+                }
+                var html="<input type=\"hidden\" name=\"more["+id+"][type]\" value=\""+selectedFormula.selectedFormula.type+"\">\n" +
+                        "<input type=\"hidden\" name=\"more["+id+"][value]\" value=\""+selectedFormula.selectedFormula.value+"\">";
+                var str="";
+                if(selectedFormula.selectedFormula.type=="1"){
+                    str="数量=屏体面积*"+selectedFormula.selectedFormula.value;
+                }
+                if(selectedFormula.selectedFormula.type=="2"){
+                    str="数量=屏体数量*"+selectedFormula.selectedFormula.value;
+                }
+                if(selectedFormula.selectedFormula.type=="3"){
+                    str="固定值="+selectedFormula.selectedFormula.value;
+                }
+                $(obj).parent().parent().find('.more').html(str);
+                $(obj).siblings('.hidden').html(html);
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+            }
+        });
+    }
+
+    function del_goods(id,obj) {
+        $(obj).parent().parent().remove();
+    }
+</script>
+</body>
+</html>

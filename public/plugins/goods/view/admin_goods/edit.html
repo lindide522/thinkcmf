@@ -1,0 +1,233 @@
+<include file="public@head" />
+<style type="text/css">
+    .pic-list li {
+        margin-bottom: 5px;
+    }
+</style>
+<script type="text/html" id="photos-item-tpl">
+    <li id="saved-image{id}">
+        <input id="photo-{id}" type="hidden" name="photo_urls[]" value="{filepath}">
+        <input class="form-control" id="photo-{id}-name" type="text" name="photo_names[]" value="{name}"
+               style="width: 200px;" title="图片名称">
+        <img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;"
+             onclick="imagePreviewDialog(this.src);">
+        <a href="javascript:uploadOneImage('图片上传','#photo-{id}');">替换</a>
+        <a href="javascript:(function(){$('#saved-image{id}').remove();})();">移除</a>
+    </li>
+</script>
+<script type="text/html" id="files-item-tpl">
+    <li id="saved-file{id}">
+        <input id="file-{id}" type="hidden" name="file_urls[]" value="{filepath}">
+        <input class="form-control" id="file-{id}-name" type="text" name="file_names[]" value="{name}"
+               style="width: 200px;" title="文件名称">
+        <a id="file-{id}-preview" href="{preview_url}" target="_blank">下载</a>
+        <a href="javascript:uploadOne('图片上传','#file-{id}','file');">替换</a>
+        <a href="javascript:(function(){$('#saved-file{id}').remove();})();">移除</a>
+    </li>
+</script>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('goods://AdminGoods/index')}">商品管理</a></li>
+        <li class="active"><a href="#A" data-toggle="tab">商品基本资料</a></li>
+        <li><a href="#B" data-toggle="tab">商品附加资料</a></li>
+        <li><a href="#C" data-toggle="tab">商品属性</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20"
+          action="{:cmf_plugin_url('goods://AdminGoods/edit')}">
+        <div class="tab-content">
+            <div class="tab-pane active" id="A">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="form-required">*</span>中文名称</label>
+                    <div class="col-md-6 col-sm-10">
+                        <input type="text" class="form-control" name="goods_name" value="{$data.goods_name}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">英文名称</label>
+                    <div class="col-md-6 col-sm-10">
+                        <input type="text" class="form-control" name="goods_en_name" value="{$data.goods_en_name}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">类别</label>
+                    <div class="col-md-6 col-sm-10">
+                        <select name="cat_id" class="form-control" required>
+                            <option value="">请选择类别</option>
+                            <volist name="catTree" id="vo">
+                                <option value="{$vo.cat_id}" <eq name="vo.cat_id" value="$data.cat_id">selected</eq>>{$vo.title_show}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">缩略图</label>
+                    <div class="col-md-6 col-sm-10">
+                        <input type="hidden" name="thumb_img" id="thumbnail" value="{$data.thumb_img}">
+                        <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                            <if condition="empty($data.thumb_img)">
+                                <img src="__ADMIN_TMPL__/public/assets/images/default-thumbnail.png" id="thumbnail-preview" width="135" style="cursor: pointer"/>
+                                <else/>
+                                <img src="{:cmf_get_image_preview_url($data.thumb_img)}" width="135" id="thumbnail-preview" style="cursor: pointer"/>
+                            </if>
+                        </a>
+                        <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="form-required">*</span>单价</label>
+                    <div class="col-md-6 col-sm-10">
+                        <input type="text" class="form-control" name="market_price" value="{$data.market_price}" required style="width: 100px">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">商品详情</label>
+                    <div class="col-md-6 col-sm-10">
+                        <script type="text/plain" id="content" name="goods_content">{$data.goods_content}</script>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="B">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">所属品牌</label>
+                    <div class="col-md-6 col-sm-10">
+                        <select name="brand_id" class="form-control">
+                            <option value="">选择品牌</option>
+                            <volist name="brand" id="vo">
+                                <option value="{$vo.brand_id}" <eq name="vo.brand_id" value="$data.brand_id">selected</eq>>{$vo.name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">所属供应商</label>
+                    <div class="col-md-6 col-sm-10">
+                        <select name="suppliers_id" class="form-control">
+                            <option value="">选择供应商</option>
+                            <volist name="suppliers" id="vo">
+                                <option value="{$vo.suppliers_id}" <eq name="vo.suppliers_id" value="$data.suppliers_id">selected</eq>>{$vo.name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">商品描述</label>
+                    <div class="col-md-6 col-sm-10">
+                        <textarea name="goods_remark"  class="form-control">{$data.goods_remark}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">上传相册</label>
+                    <div class="col-md-6 col-sm-10">
+                        <ul id="photos" class="pic-list list-unstyled form-inline">
+                        <notempty name="goods_image">
+                            <foreach name="goods_image" item="vo">
+                                <eq name="vo.type" value="1">
+                                <php>$img_url=cmf_get_image_preview_url($vo['url']);</php>
+                                <li id="saved-image{$key}">
+                                    <input id="photo-{$key}" type="hidden" name="photo_urls[]"
+                                           value="{$vo.url}">
+                                    <input class="form-control" id="photo-{$key}-name" type="text"
+                                           name="photo_names[]"
+                                           value="{$vo.name|default=''}" style="width: 200px;" title="图片名称">
+                                    <img id="photo-{$key}-preview"
+                                         src="{:cmf_get_image_preview_url($vo['url'])}"
+                                         style="height:36px;width: 36px;"
+                                         onclick="parent.imagePreviewDialog(this.src);">
+                                    <a href="javascript:uploadOneImage('图片上传','#photo-{$key}');">替换</a>
+                                    <a href="javascript:(function(){$('#saved-image{$key}').remove();})();">移除</a>
+                                </li>
+                                </eq>
+                            </foreach>
+                        </notempty>
+                        </ul>
+                        <a href="javascript:uploadMultiImage('图片上传','#photos','photos-item-tpl');"
+                           class="btn btn-default btn-sm">选择图片</a>                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">上传附件</label>
+                    <div class="col-md-6 col-sm-10">
+                        <ul id="files" class="pic-list list-unstyled form-inline">
+                            <notempty name="goods_image">
+                                <foreach name="goods_image" item="vo">
+                                    <eq name="vo.type" value="2">
+                                    <php>$file_url=cmf_get_file_download_url($vo['url']);</php>
+                                    <li id="saved-file{$key}">
+                                        <input id="file-{$key}" type="hidden" name="file_urls[]"
+                                               value="{$vo.url}">
+                                        <input class="form-control" id="file-{$key}-name" type="text"
+                                               name="file_names[]"
+                                               value="{$vo.name}" style="width: 200px;" title="图片名称">
+                                        <a id="file-{$key}-preview" href="{$file_url}" target="_blank">下载</a>
+                                        <a href="javascript:uploadOne('图片上传','#file-{$key}','file');">替换</a>
+                                        <a href="javascript:(function(){$('#saved-file{$key}').remove();})();">移除</a>
+                                    </li>
+                                    </eq>
+                                </foreach>
+                            </notempty>
+                        </ul>
+                        <a href="javascript:uploadMultiFile('附件上传','#files','files-item-tpl','file');"
+                           class="btn btn-sm btn-default">选择文件</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="C">
+                <div class="form-group nav-tabs">
+                    <label class="col-sm-2 control-label">所属类型</label>
+                    <div class="col-md-6 col-sm-10">
+                        <select name="goods_type" class="form-control" id="selectType">
+                            <option value="">选择类型</option>
+                            <volist name="type" id="vo">
+                                <option value="{$vo.type_id}" <eq name="vo.type_id" value="$data.goods_type">selected</eq>>{$vo.name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+                <div id="goodsAttr">
+
+                </div>
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="id" value="{$data.goods_id}">
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+            </div>
+        </div>
+    </form>
+</div>
+<include file="public/scripts"/>
+</div>
+<script type="text/javascript">
+    //编辑器路径定义
+    var editorURL = GV.WEB_ROOT;
+</script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        editorcontent = new baidu.editor.ui.Editor();
+        editorcontent.render('content');
+        try {
+            editorcontent.sync();
+        } catch (err) {
+        }
+        $("#selectType").change(function () {
+            var type_id=this.value;
+            $.get("{:cmf_plugin_url('goods://AdminGoods/ajaxGoodAttribute')}?type_id="+type_id+"&goods_id={$data.goods_id}",function (res) {
+                $('#goodsAttr').html(res);
+            })
+        })
+        $("#selectType").trigger('change');
+    });
+
+</script>
+<link rel="stylesheet" href="__ADMIN_TMPL__/public/assets/themes/{:cmf_get_admin_style()}/combo.select.css">
+<script src="__ADMIN_TMPL__/public/assets/js/jquery.combo.select.js"></script>
+<script>
+    $(function() {
+        $('select').comboSelect()
+    });
+</script>
+</body>
+</html>
